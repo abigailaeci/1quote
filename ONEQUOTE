@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruang Tenang - Malam Berbintang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&family=Caveat:wght@400;700&family=Playfair+Display:italic,wght@400;700&display=swap');
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(to bottom, #020617, #0f172a, #1e293b);
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #f8fafc;
+        }
+
+        /* Bintang Berkelip */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .nebula-1 { width: 500px; height: 500px; background: #1e3a8a; top: -10%; right: -10%; }
+        .nebula-2 { width: 400px; height: 400px; background: #0c4a6e; bottom: -10%; left: -10%; }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            padding: 4rem 2rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            max-width: 550px;
+            width: 85%;
+            z-index: 10;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Font Handwriting Caveat yang lebih santai */
+        .sweet-title {
+            font-family: 'Caveat', cursive;
+            color: #e2e8f0;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+            line-height: 1.1;
+        }
+
+        .btn-quote {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            padding: 1rem 3.5rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-quote:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
+            letter-spacing: 1.5px;
+        }
+
+        .credit-text {
+            margin-top: 2.5rem;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 1px;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .hidden-card {
+            display: none;
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+        }
+
+        .fade-in { animation: fadeIn 2s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="star-container"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+
+    <!-- Page 1: Home -->
+    <div id="main-page" class="content-card fade-in">
+        <h2 class="sweet-title text-5xl md:text-6xl mb-2">
+            One Quote
+        </h2>
+        <h3 class="sweet-title text-3xl md:text-4xl mb-12 opacity-90">
+            for a special one
+        </h3>
+        <p class="text-slate-500 mb-12 text-xs font-light tracking-[0.2em] uppercase italic opacity-60">
+            a little message for your day..
+        </p>
+        
+        <button onclick="showQuote()" class="btn-quote">
+            Open Message
+        </button>
+
+        <div class="credit-text">
+            by @abigaila_eci x @masih_hidvp
+        </div>
+    </div>
+
+    <!-- Page 2: Quote Display -->
+    <div id="quote-page" class="content-card hidden-card">
+        <div id="quote-text" class="text-xl md:text-2xl font-light text-white italic leading-relaxed mb-8">
+            <!-- Text Quote -->
+        </div>
+        <div id="quote-author" class="text-blue-400 font-bold tracking-widest uppercase text-[10px] mb-12 opacity-60">
+            <!-- Author -->
+        </div>
+        
+        <div class="flex flex-col items-center">
+            <button onclick="showQuote()" class="btn-quote text-sm px-10 py-3">
+                Give me another one
+            </button>
+            <div class="credit-text">
+                by @abigaila_eci x @masih_hidvp
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quotesList = [
+            { t: "Menulis adalah cara untuk berbicara ketika mulutmu terlalu gemetar untuk bersuara.", a: "Virginia Woolf" },
+            { t: "Hati yang terluka seringkali menjadi tempat di mana kasih sayang yang paling murni tumbuh.", a: "Henri Nouwen" },
+            { t: "Jangan menyerah pada keputusasaan. Itu akan menghalangimu untuk melihat cahaya di ujung terowongan.", a: "Franz Kafka" },
+            { t: "Di tengah musim dingin, aku akhirnya menyadari bahwa di dalam diriku ada musim panas yang tak terkalahkan.", a: "Albert Camus" },
+            { t: "Mungkin tugasku bukanlah untuk sembuh sepenuhnya, tapi untuk belajar menari dalam kegelapan.", a: "INFJ Reflection" },
+            { t: "Kamu tidak harus menjadi produktif untuk menjadi berharga. Keberadaanmu sudah cukup.", a: "Anonim" },
+            { t: "Dunia ini memang berat, tapi kamu adalah salah satu alasan mengapa dunia ini tetap indah.", a: "Anonim" },
+            { t: "Rasa sakit yang kamu rasakan hari ini akan menjadi kekuatan yang kamu butuhkan besok.", a: "Anonim" },
+            { t: "Tidak apa-apa untuk merasa hancur. Cahaya hanya bisa masuk melalui retakan.", a: "Ernest Hemingway" },
+            { t: "Malam yang paling gelap sekalipun akan berakhir dan matahari akan terbit.", a: "Victor Hugo" },
+            { t: "Bintang tidak bisa bersinar tanpa kegelapan.", a: "Anonim" },
+            { t: "Jangan percaya pada pikiran yang memberitahumu bahwa tidak ada jalan keluar.", a: "Hope" },
+            { t: "Istirahatlah jika lelah, tapi jangan berhenti.", a: "Anonim" },
+            { t: "Kamu jauh lebih kuat dari apa yang kamu pikirkan saat ini.", a: "Strength" },
+            { t: "Setiap langkah kecil adalah kemenangan besar.", a: "Small Wins" },
+            { t: "Bernapaslah. Itu saja sudah cukup untuk saat ini.", a: "Mindfulness" },
+            { t: "Badai ini akan berlalu, meski sekarang rasanya abadi.", a: "Resilience" },
+            { t: "Kamu adalah karya seni yang sedang berproses.", a: "Anonim" },
+            { t: "Kesehatan mental bukan tujuan, melainkan perjalanan.", a: "Anonim" },
+            { t: "Jangan memburu kesempurnaan, carilah kedamaian.", a: "Peace of Mind" },
+            { t: "Luka adalah tempat di mana cahaya memasukimu.", a: "Rumi" },
+            { t: "Istirahat bukan berarti menyerah.", a: "Self-Care" },
+            { t: "Dunia ini lebih baik karena ada kamu di dalamnya.", a: "Validation" },
+            { t: "Cukuplah menjadi diri sendiri; dunia tidak butuh kepalsuan yang sempurna.", a: "Authenticity" },
+            { t: "Terima kasih telah bertahan sampai titik ini.", a: "Gratitude" },
+            { t: "Kamu istimewa, dan dunia menunggumu dengan sabar.", a: "Closing Reflection" },
+            { t: "Cinta diri sendiri adalah awal dari roman seumur hidup.", a: "Oscar Wilde" },
+            { t: "Satu-satunya cara untuk melakukan pekerjaan besar adalah dengan mencintai apa yang kamu lakukan.", a: "Steve Jobs" },
+            { t: "Jangan biarkan hari kemarin menyita terlalu banyak waktu hari ini.", a: "Will Rogers" },
+            { t: "Kamu tidak bisa kembali dan mengubah awal, tapi kamu bisa mulai dari mana kamu berada dan mengubah akhirnya.", a: "C.S. Lewis" },
+            { t: "Kebahagiaan bukanlah sesuatu yang sudah jadi. Itu berasal dari tindakanmu sendiri.", a: "Dalai Lama" },
+            { t: "Jadilah perubahan yang ingin kamu lihat di dunia.", a: "Mahatma Gandhi" },
+            { t: "Hidup adalah apa yang terjadi ketika kamu sibuk membuat rencana lain.", a: "John Lennon" },
+            { t: "Satu-satunya hal yang harus kita takuti adalah ketakutan itu sendiri.", a: "Franklin D. Roosevelt" },
+            { t: "Kegagalan adalah bumbu yang memberi kesuksesan rasa yang lebih baik.", a: "Truman Capote" },
+            { t: "Teruslah menatap ke arah matahari, maka bayang-bayang akan jatuh di belakangmu.", a: "Walt Whitman" },
+            { t: "Keberanian adalah kemampuan untuk tetap lembut di dunia yang terkadang keras.", a: "Anonim" },
+            { t: "Apa yang ada di belakang kita dan apa yang ada di depan kita adalah masalah kecil dibandingkan dengan apa yang ada di dalam kita.", a: "Ralph Waldo Emerson" },
+            { t: "Kamu tidak pernah terlalu tua untuk menetapkan tujuan lain atau memimpikan mimpi baru.", a: "C.S. Lewis" },
+            { t: "Segala sesuatu yang kamu bayangkan adalah nyata.", a: "Pablo Picasso" },
+            { t: "Percayalah kamu bisa dan kamu sudah setengah jalan ke sana.", a: "Theodore Roosevelt" },
+            { t: "Tindakan adalah kunci dasar untuk semua kesuksesan.", a: "Pablo Picasso" },
+            { t: "Kreativitas membutuhkan keberanian untuk melepaskan kepastian.", a: "Erich Fromm" },
+            { t: "Jangan menunggu. Waktunya tidak akan pernah tepat.", a: "Napoleon Hill" },
+            { t: "Optimisme adalah kepercayaan yang mengarah pada pencapaian.", a: "Helen Keller" },
+            { t: "Rahasia untuk maju adalah dengan memulai.", a: "Mark Twain" },
+            { t: "Definisi gila adalah melakukan hal yang sama berulang kali dan mengharapkan hasil yang berbeda.", a: "Albert Einstein" },
+            { t: "Satu-satunya batasan bagi realisasi hari esok kita adalah keraguan kita hari ini.", a: "Franklin D. Roosevelt" },
+            { t: "Bekerjalah seolah-olah kamu tidak butuh uang. Cintailah seolah-olah kamu tidak pernah tersakiti.", a: "Satchel Paige" },
+            { t: "Hidup itu singkat, dan terserah padamu untuk membuatnya manis.", a: "Sarah Louise Delany" },
+            { t: "Jangan biarkan apa yang tidak bisa kamu lakukan mengganggu apa yang bisa kamu lakukan.", a: "John Wooden" },
+            { t: "Lakukan apa yang kamu bisa, dengan apa yang kamu miliki, di mana pun kamu berada.", a: "Theodore Roosevelt" },
+            { t: "Sukses adalah berjalan dari kegagalan ke kegagalan tanpa kehilangan antusiasme.", a: "Winston Churchill" },
+            { t: "Ingatlah bahwa tidak mendapatkan apa yang kamu inginkan kadang-kadang adalah keberuntungan yang luar biasa.", a: "Dalai Lama" },
+            { t: "Hanya mereka yang berani gagal besar yang bisa mencapai hal besar.", a: "Robert F. Kennedy" },
+            { t: "Tantangan adalah apa yang membuat hidup menarik; mengatasinya adalah apa yang membuat hidup bermakna.", a: "Joshua J. Marine" },
+            { t: "Kamu melewatkan 100% tembakan yang tidak kamu ambil.", a: "Wayne Gretzky" },
+            { t: "Cara terbaik untuk memprediksi masa depan adalah dengan menciptakannya.", a: "Peter Drucker" },
+            { t: "Tidak ada yang bisa membuatmu merasa rendah diri tanpa persetujuanmu.", a: "Eleanor Roosevelt" },
+            { t: "Hambatan tidak harus menghentikanmu. Jika kamu menabrak tembok, jangan berbalik dan menyerah.", a: "Michael Jordan" },
+            { t: "Segala sesuatu memiliki keindahan, tetapi tidak semua orang melihatnya.", a: "Confucius" },
+            { t: "Tujuan hidup adalah hidup dengan tujuan.", a: "Robert Byrne" },
+            { t: "Kekuatan tidak berasal dari kemampuan fisik. Ia berasal dari kemauan yang tak tergoyahkan.", a: "Mahatma Gandhi" },
+            { t: "Jangan takut untuk melepaskan hal yang baik untuk mendapatkan hal yang hebat.", a: "John D. Rockefeller" },
+            { t: "Kamu adalah arsitek dari nasibmu sendiri; kamu adalah penulis dari ceritamu sendiri.", a: "Anonim" },
+            { t: "Petualangan terbesar yang bisa kamu ambil adalah menjalani hidup sesuai impianmu.", a: "Oprah Winfrey" },
+            { t: "Jadilah pelangi di awan orang lain.", a: "Maya Angelou" },
+            { t: "Perjalanan seribu mil dimulai dengan satu langkah.", a: "Lao Tzu" },
+            { t: "Kebahagiaan bukanlah tujuan, itu adalah cara hidup.", a: "Burton Hills" },
+            { t: "Hal-hal terbaik dan terindah di dunia tidak dapat dilihat atau disentuh, mereka harus dirasakan dengan hati.", a: "Helen Keller" },
+            { t: "Hidup bukan tentang menemukan dirimu sendiri. Hidup adalah tentang menciptakan dirimu sendiri.", a: "George Bernard Shaw" },
+            { t: "Jika kamu ingin mengangkat dirimu sendiri, angkatlah orang lain.", a: "Booker T. Washington" },
+            { t: "Kita adalah apa yang kita lakukan berulang kali. Keunggulan, bukanlah tindakan, melainkan kebiasaan.", a: "Aristoteles" },
+            { t: "Masa depan milik mereka yang percaya pada keindahan mimpi mereka.", a: "Eleanor Roosevelt" },
+            { t: "Jangan hitung hari, buatlah hari-hari itu berarti.", a: "Muhammad Ali" },
+            { t: "Berubahlah sebelum kamu harus berubah.", a: "Jack Welch" },
+            { t: "Masalahmu bukan masalahnya. Masalahnya adalah sikapmu tentang masalahnya.", a: "Captain Jack Sparrow" },
+            { t: "Kesempatan seringkali menyamar sebagai kerja keras, jadi kebanyakan orang tidak mengenalinya.", a: "Ann Landers" },
+            { t: "Tidak ada jalan pintas ke tempat yang layak dikunjungi.", a: "Beverly Sills" },
+            { t: "Jika kamu mencintai hidup, jangan buang waktu, karena waktu adalah bahan penyusun hidup.", a: "Bruce Lee" },
+            { t: "Sikap adalah hal kecil yang membuat perbedaan besar.", a: "Winston Churchill" },
+            { t: "Kamu tidak bisa menghentikan ombak, tapi kamu bisa belajar berselancar.", a: "Jon Kabat-Zinn" },
+            { t: "Fokuslah pada perjalanan, bukan pada tujuannya.", a: "Greg Anderson" },
+            { t: "Semua impian kita bisa menjadi kenyataan jika kita memiliki keberanian untuk mengejarnya.", a: "Walt Disney" },
+            { t: "Kamu harus menjadi orang yang kamu cari.", a: "Anonim" },
+            { t: "Apa pun dirimu, jadilah yang terbaik.", a: "Abraham Lincoln" },
+            { t: "Keheningan adalah sumber kekuatan yang besar.", a: "Lao Tzu" },
+            { t: "Waktu yang kamu nikmati untuk dibuang bukanlah waktu yang sia-sia.", a: "Bertrand Russell" },
+            { t: "Jangan pernah menyesali apa pun yang membuatmu tersenyum.", a: "Mark Twain" },
+            { t: "Kesuksesan biasanya datang kepada mereka yang terlalu sibuk untuk mencarinya.", a: "Henry David Thoreau" },
+            { t: "Hidup adalah petualangan yang berani atau tidak sama sekali.", a: "Helen Keller" },
+            { t: "Masa depanmu diciptakan oleh apa yang kamu lakukan hari ini, bukan esok.", a: "Robert Kiyosaki" },
+            { t: "Kamu lahir sebagai orisinal, jangan mati sebagai tiruan.", a: "John Mason" },
+            { t: "Setiap hari adalah awal yang baru. Tarik napas dalam-dalam dan mulai lagi.", a: "Anonim" },
+            { t: "Jangan bandingkan hidupmu dengan orang lain. Tidak ada perbandingan antara matahari dan bulan.", a: "Anonim" },
+            { t: "Kekuatan yang sebenarnya adalah menyembunyikan rasa sakitmu dari orang lain dengan senyuman.", a: "Anonim" },
+            { t: "Cukuplah untuk hari ini, biarkan hari esok mengurus dirinya sendiri.", a: "Anonim" },
+            { t: "Terkadang yang kamu butuhkan hanyalah sedikit iman sebesar biji sesawi.", a: "Anonim" },
+            { t: "Kamu adalah alasan seseorang tersenyum hari ini.", a: "Anonim" },
+            { t: "Tetaplah rendah hati dalam kemenangan dan kuat dalam kekalahan.", a: "Anonim" },
+            { t: "Kedamaian adalah saat kamu tidak lagi mencoba mengubah masa lalu.", a: "Anonim" },
+            { t: "Semoga hatimu selalu menemukan jalan pulang menuju ketenangan.", a: "Ruang Tenang" }
+        ];
+
+        function createStars() {
+            const container = document.getElementById('star-container');
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = 1 + Math.random() * 2;
+                const duration = 3 + Math.random() * 5;
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(star);
+            }
+        }
+
+        function showQuote() {
+            const mainPage = document.getElementById('main-page');
+            const quotePage = document.getElementById('quote-page');
+            const textEl = document.getElementById('quote-text');
+            const authorEl = document.getElementById('quote-author');
+
+            const q = quotesList[Math.floor(Math.random() * quotesList.length)];
+            
+            quotePage.style.opacity = '0';
+            
+            setTimeout(() => {
+                textEl.innerText = `"${q.t}"`;
+                authorEl.innerText = `— ${q.a}`;
+                
+                mainPage.classList.add('hidden-card');
+                quotePage.classList.remove('hidden-card');
+                
+                setTimeout(() => {
+                    quotePage.style.opacity = '1';
+                    quotePage.style.transform = 'scale(1) translateY(0)';
+                }, 50);
+            }, 300);
+        }
+
+        window.onload = createStars;
+    </script>
+</body>
+</html>
